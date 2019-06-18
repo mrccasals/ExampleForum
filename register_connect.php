@@ -39,7 +39,7 @@ if($success){
 	$conn->close(); 
 }
 ?>
-<html lang="en2">
+<html lang="en">
 	<head>
 		<title>Example Forum</title>
 		<link rel="stylesheet" href="style.css">
