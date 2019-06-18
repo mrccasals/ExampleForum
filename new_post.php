@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+if(!isset($_SESSION['user'])){
+	die("You are not allowed to enter this area!");
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,34 +36,18 @@ session_start();
 			</ul>
 		</nav>
 		<article>
-			<h3 class="titleList">Post list</h3>
-			<?php
-				if(isset($_SESSION['user'])){
-					echo "<div class='buttonPost'><a href='new_post.php'><b>Create Post</b></a></div><br>";
-				}
-			?>
-			<?php
-					$servername = "localhost";
-					$username = "root";
-					$password = "";
-					$dbname = "foro";
-					
-					$conn = new mysqli($servername, $username, $password, $dbname);
-					
-					if ($conn->connect_error) {
-						die("Connection failed: " . $conn->connect_error);
-					}
-
-					$sql = "SELECT idPost, title FROM post ORDER BY idPost DESC";
-					$result = $conn->query($sql);
-					
-					while($row = $result->fetch_assoc()){
-						echo "<div class='postTitle'>
-				
-								<a href='#'><b>". $row['title'] ."</b></a>
-							</div><br>";
-					}
-				?>
+			<h3 class="titleList">New Post</h3>
+				<div id="login">
+					<br><br>
+					<form action="posted.php" method="post">
+						<b>Title</b><br>
+						<input type="text" name="title"><br><br>
+						<textarea name="message" rows="20" cols="100"></textarea><br><br>
+						<input type="submit" name="enterText" value="Send"><br>
+					</form>
+				<br><br>
+			</div>
+			<br>
 		</article>
 		<footer>
 			<h6>© Marc Casals Camps, 2019</h6>

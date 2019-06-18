@@ -1,41 +1,43 @@
-<?php 
+<?php
 session_start();
-if(isset($_SESSION['user'])){
+
+if(!isset($_SESSION['user'])){
 	die("You are not allowed to enter this area!");
 }
-$userLogin =  $_POST['user'];
-$passwordLogin = $_POST['passw'];
+
+$postTitle =  $_POST['title'];
+$postText = $_POST['message'];
+$postUser = $_SESSION['user'];
 
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "foro";
-
+	// Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
-$success = true;
+	// Check connection
 
 if ($conn->connect_error) {
-		session_unset(); 
-		session_destroy();
-		die("Connection failed: " . $conn->connect_error);
-	} 
-	
-$sql = "SELECT user, passw FROM users WHERE user = '$userLogin' and passw = '$passwordLogin'";
-$result = $conn->query($sql);
-if($result->num_rows != 1){
-	session_unset(); 
-	session_destroy();
-	$result = "Invalid credentials, try again.";
-	$success = false;
-	
+	die("Connection failed: " . $conn->connect_error);
 }
-else{
-	$result = "Welcome back " . $userLogin . "!";
-	$_SESSION['user'] = $userLogin;
+ 
+$maxPost = "SELECT max(idPost) FROM post";
+$resultMax = $conn->query($maxPost);
+$nMax = $resultMax->fetch_assoc();
+$nMax = (int) $nMax;
+$nMax++;
+ 
+$sql = "INSERT INTO post (idPost, author, title, posted) values ('$nMax', '$postUser', '$postTitle', '$postText')";
+
+if ($conn->query($sql) === TRUE) {
+	$result = "Post created!";
+	$success = true;
+} else {
+	$result = "Something went wrong.";
+	$success = false;
 }
 
 $conn->close(); 
-
 ?>
 
 <html lang="en">
@@ -62,18 +64,11 @@ $conn->close();
 			<h3 class="titleList">Register</h3>
 			<div id="login">
 					<br>
-					<?php echo $result; ?>
-					<br><br>
-					<?php
-					if($success){
-						echo "Redirecting you in 3 seconds.</a>";
-						header( "refresh:3;url=index.php" );
-					}
-					else{
-						echo "<a href='login.php'>Go back</a>";
-						header( "refresh:2;url=login.php" );
-					}
+					<?php 
+						echo $result; 
+						header( "refresh:60;url=index.php" );
 					?>
+					<br><br>
 					<br><br>
 			</div>
 			<br>
