@@ -23,7 +23,7 @@
 			<h3 class="titleList">Login</h3>
 			<div id="login">
 			<br><br>
-				<form method="post">
+				<form action="login_connect.php" method="post">
 					<b>Username:</b><br>
 					<input type="text" name="user"><br>
 					<b>Password:</b><br>
