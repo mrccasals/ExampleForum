@@ -5,9 +5,10 @@ if(!isset($_SESSION['user'])){
 	die("You are not allowed to enter this area!");
 }
 
-$postTitle =  $_POST['title'];
-$postText = $_POST['message'];
-$postUser = $_SESSION['user'];
+$commentText = $_POST['message'];
+$commentUser = $_SESSION['user'];
+$thisID = $_POST['thisID'];
+$thisID = (int) $thisID;
 
 $servername = "localhost";
 $username = "root";
@@ -20,21 +21,20 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error);
 }
-
-$maxPost = "SELECT MAX(idPost) AS max_post FROM post";
-
+ 
+ 
+$maxPost = "SELECT max(idComment) AS max_comment FROM comment WHERE idPost = '$thisID'";
 if($conn->query($maxPost) == FALSE) die("Error picking max");
 $resultMax = $conn->query($maxPost);
-
 $row = $resultMax->fetch_assoc();
-$nMax = (int) $row['max_post'];
+$nMax = (int) $row['max_comment'];
 $nMax++;
 
 
-$sql = "INSERT INTO post (idPost, author, title, posted) values ('$nMax', '$postUser', '$postTitle', '$postText')";
+$sql = "INSERT INTO comment (idComment, author, posted, idPost) values ('$nMax', '$commentUser', '$commentText', '$thisID')";
 
 if ($conn->query($sql) === TRUE) {
-	$result = "Post created!";
+	$result = "Comment created!";
 	$success = true;
 } else {
 	$result = "Something went wrong.";
@@ -78,7 +78,7 @@ $conn->close();
 			<div id="login">
 					<br>
 					<?php 
-						echo $result; 
+						echo $result;
 						header( "refresh:1;url=index.php" );
 					?>
 					<br><br>

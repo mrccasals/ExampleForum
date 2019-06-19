@@ -1,5 +1,9 @@
 <?php
 session_start();
+
+if(!isset($_SESSION['user'])){
+	die("You are not allowed to enter this area!");
+}
 ?>
 
 <!DOCTYPE html>
@@ -28,38 +32,24 @@ session_start();
 					echo "<li><a href='login.php'>Login</a></li>
 						<li><a href='register.php'>Register</a></li>";
 				}
+				
+				$thisID = $_GET['post'];
+				$thisID = (int) $thisID;
 				?>
 			</ul>
 		</nav>
 		<article>
-			<h3 class="titleList">Post list</h3>
-			<?php
-				if(isset($_SESSION['user'])){
-					echo "<div class='buttonPost'><a href='new_post.php'><b>Create Post</b></a></div><br>";
-				}
-			?>
-			<?php
-					$servername = "localhost";
-					$username = "root";
-					$password = "";
-					$dbname = "foro";
-					
-					$conn = new mysqli($servername, $username, $password, $dbname);
-					
-					if ($conn->connect_error) {
-						die("Connection failed: " . $conn->connect_error);
-					}
-
-					$sql = "SELECT idPost, title FROM post ORDER BY idPost DESC";
-					$result = $conn->query($sql);
-					
-					while($row = $result->fetch_assoc()){
-						echo "<div class='postTitle'>
-				
-								<a href='show.php?post=". $row['idPost'] ."'><b>". $row['title'] ."</b></a>
-							</div><br>";
-					}
-				?>
+			<h3 class="titleList">New Comment</h3>
+				<div id="login">
+					<br><br>
+					<form action="commented.php" method="post">
+						<textarea name="message" rows="20" cols="100"></textarea><br><br>
+						<input type='hidden' name='thisID' value='<?php echo "$thisID";?>'/>
+						<input type="submit" name="enterText" value="Send"><br>
+					</form>
+				<br><br>
+			</div>
+			<br>
 		</article>
 		<footer>
 			<h6>© Marc Casals Camps, 2019</h6>
