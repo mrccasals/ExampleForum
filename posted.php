@@ -31,7 +31,11 @@ $nMax = (int) $row['max_post'];
 $nMax++;
 
 
-$sql = "INSERT INTO post (idPost, author, title, posted) values ('$nMax', '$postUser', '$postTitle', '$postText')";
+$postUser =  mysqli_real_escape_string($conn, $postUser);
+$postTitle = mysqli_real_escape_string($conn, $postTitle);
+$postText = mysqli_real_escape_string($conn, $postText);
+
+$sql = "INSERT INTO post (idPost, author, title, posted) values ('$nMax', '$postUser','$postTitle','$postText')";
 
 if ($conn->query($sql) === TRUE) {
 	$result = "Post created!";
@@ -63,7 +67,7 @@ $conn->close();
 				<li><a href="index.php">Index</a></li>
 				<?php
 				if(isset($_SESSION['user'])){
-					echo "<li><a href='user.php'>". $_SESSION['user'] ."</a></li>
+					echo "<li><a href='user.php'>". htmlentities($_SESSION['user']) ."</a></li>
 					<li><a href='disconnect.php'>Disconnect</a></li>";
 				}
 				else{

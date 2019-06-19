@@ -55,7 +55,7 @@ session_start();
 				<li><a href="index.php">Index</a></li>
 				<?php
 				if(isset($_SESSION['user'])){
-					echo "<li><a href='user.php'>". $_SESSION['user'] ."</a></li>
+					echo "<li><a href='user.php'>". htmlentities($_SESSION['user']) ."</a></li>
 					<li><a href='disconnect.php'>Disconnect</a></li>";
 				}
 				else{
@@ -66,15 +66,15 @@ session_start();
 			</ul>
 		</nav>
 		<article>
-			<h3 class="titleList"><?php echo $thisTitle; ?></h3>
+			<h3 class="titleList"><?php echo htmlentities($thisTitle); ?></h3>
 			<?php
 				if(isset($_SESSION['user'])){
 					echo "<div class='buttonPost'>
 						<a href='new_reply.php?post=" .$thisID . "'><b>Comment</b></a></div><br>";
 				}
 				
-				echo "<div class='postTitle'><i>" . $thisAutor . " says:</i><br><br>
-						" . $thisText . "
+				echo "<div class='postTitle'><i>" . htmlentities($thisAutor) . " says:</i><br><br>
+						" . htmlentities($thisText). "
 							</div><br>";
 					
 
@@ -82,8 +82,8 @@ session_start();
 					$result = $conn->query($sql);
 					
 					while($row = $result->fetch_assoc()){
-						echo "<div class='postTitle'><i>" . $row['author'] . " says:</i><br><br>
-						" . $row['posted'] . "
+						echo "<div class='postTitle'><i>" . htmlentities($row['author']) . " says:</i><br><br>
+						" .  htmlentities($row['posted']) . "
 							</div><br>";
 					}
 				?>

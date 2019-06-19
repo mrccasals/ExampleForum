@@ -31,6 +31,9 @@ $nMax = (int) $row['max_comment'];
 $nMax++;
 
 
+$commentUser =  mysqli_real_escape_string($conn, $commentUser);
+$commentText = mysqli_real_escape_string($conn, $commentText);
+
 $sql = "INSERT INTO comment (idComment, author, posted, idPost) values ('$nMax', '$commentUser', '$commentText', '$thisID')";
 
 if ($conn->query($sql) === TRUE) {
@@ -63,7 +66,7 @@ $conn->close();
 				<li><a href="index.php">Index</a></li>
 				<?php
 				if(isset($_SESSION['user'])){
-					echo "<li><a href='user.php'>". $_SESSION['user'] ."</a></li>
+					echo "<li><a href='user.php'>". htmlentities($_SESSION['user']) ."</a></li>
 					<li><a href='disconnect.php'>Disconnect</a></li>";
 				}
 				else{

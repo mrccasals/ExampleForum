@@ -32,12 +32,8 @@ session_start();
 			</ul>
 		</nav>
 		<article>
-			<h3 class="titleList">Post list</h3>
-			<?php
-				if(isset($_SESSION['user'])){
-					echo "<div class='buttonPost'><a href='new_post.php'><b>Create Post</b></a></div><br>";
-				}
-			?>
+			<h3 class="titleList"><?php echo htmlentities($_SESSION['user']) ?></h3>
+			<h4 style="text-align: center; font-family: Arial, Helvetica, sans-serif;">Created Posts:</h4>
 			<?php
 					$servername = "localhost";
 					$username = "root";
@@ -49,14 +45,31 @@ session_start();
 					if ($conn->connect_error) {
 						die("Connection failed: " . $conn->connect_error);
 					}
-
-					$sql = "SELECT idPost, title FROM post ORDER BY idPost DESC";
+					$userOn = $_SESSION['user'];
+					$sql = "SELECT idPost, title FROM post WHERE author = '$userOn' ORDER BY idPost DESC";
 					$result = $conn->query($sql);
 					
 					while($row = $result->fetch_assoc()){
 						echo "<div class='postTitle'>
-				
 								<a href='show.php?post=". $row['idPost'] ."'><b>". htmlentities($row['title']) ."</b></a>
+							</div><br>";
+					}
+				?>
+				<h4 style="text-align: center; font-family: Arial, Helvetica, sans-serif;">Comments:</h4>
+				<?php
+					$sql = "SELECT idPost, posted FROM comment WHERE author = '$userOn' ORDER BY idPost DESC";
+					$result = $conn->query($sql);
+					
+					while($row = $result->fetch_assoc()){
+						$postLink = $row['idPost'];
+						$sql = "SELECT idPost, title FROM post WHERE idPost = '$postLink' ORDER BY idPost DESC";
+						$resultTwo = $conn->query($sql);
+						$rowTwo = $resultTwo->fetch_assoc();
+						
+						echo "<div class='postTitle'>
+
+								<a href='show.php?post=". $postLink ."'><b>". htmlentities($rowTwo['title']) ."</b></a><br>
+								" . htmlentities($row['posted']) . "
 							</div><br>";
 					}
 				?>

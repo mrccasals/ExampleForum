@@ -25,7 +25,7 @@ if(!isset($_SESSION['user'])){
 				<li><a href="index.php">Index</a></li>
 				<?php
 				if(isset($_SESSION['user'])){
-					echo "<li><a href='user.php'>". $_SESSION['user'] ."</a></li>
+					echo "<li><a href='user.php'>". htmlentities($_SESSION['user']) ."</a></li>
 					<li><a href='disconnect.php'>Disconnect</a></li>";
 				}
 				else{

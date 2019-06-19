@@ -29,6 +29,8 @@ if($success){
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
+$userRegister =  mysqli_real_escape_string($conn, $userRegister);
+$passwordRegister = mysqli_real_escape_string($conn, $passwordRegister);
 
 	$sql = "INSERT INTO users (user, passw)
 	values ('$userRegister', '$passwordRegister')";

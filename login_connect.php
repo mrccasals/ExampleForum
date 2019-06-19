@@ -19,7 +19,10 @@ if ($conn->connect_error) {
 		session_destroy();
 		die("Connection failed: " . $conn->connect_error);
 	} 
-	
+
+$userLogin =  mysqli_real_escape_string($conn, $userLogin);
+$passwordLogin = mysqli_real_escape_string($conn, $passwordLogin);
+
 $sql = "SELECT user, passw FROM users WHERE user = '$userLogin' and passw = '$passwordLogin'";
 $result = $conn->query($sql);
 if($result->num_rows != 1){
@@ -30,7 +33,7 @@ if($result->num_rows != 1){
 	
 }
 else{
-	$result = "Welcome back " . $userLogin . "!";
+	$result = "Welcome back " . htmlentities($userLogin) . "!";
 	$_SESSION['user'] = $userLogin;
 }
 
